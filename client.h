@@ -10,9 +10,12 @@
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <arpa/inet.h>
+#include "data.pb.h"
 
 #define SERVER_PORT 6666
 #define MAXLINE 1024
+
+using namespace sctpsample;
 
 void sctpstr_cli(FILE *fp,int sock_fd,struct sockaddr *to,socklen_t tolen);
 
@@ -80,6 +83,8 @@ void sctpstr_cli(FILE *fp,int sock_fd,struct sockaddr *to,socklen_t tolen)
         }
         sri.sinfo_stream = sendline[1] - '0';
         out_sz = strlen(sendline);
+
+        sctpsample::Data sctpdata;
 
         //发送消息
         int count = sctp_sendmsg(sock_fd,sendline,out_sz,to,tolen,0,0,sri.sinfo_stream,0,0);
