@@ -76,15 +76,18 @@ void sctpstr_cli(FILE *fp,int sock_fd,struct sockaddr *to,socklen_t tolen)
     bzero(&sri,sizeof(sri));
     while(fgets(sendline,MAXLINE,fp) != NULL)
     {
-        if(sendline[0] != '[')
-        {
-            printf("ERROR\n");
-            continue;
-        }
+//        if(sendline[0] != '[')
+//        {
+//            printf("ERROR\n");
+//            continue;
+//        }
         sri.sinfo_stream = sendline[1] - '0';
         out_sz = strlen(sendline);
 
         sctpsample::Data sctpdata;
+        sctpdata.add_content("good");
+        auto content_size = sctpdata.content_size();
+        printf("sctpsample-> content:%s size:%d", *sctpdata.content(), content_size);
 
         //发送消息
         int count = sctp_sendmsg(sock_fd,sendline,out_sz,to,tolen,0,0,sri.sinfo_stream,0,0);
